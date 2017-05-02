@@ -4,7 +4,7 @@
 #
 Name     : py2cairo
 Version  : 1.10.0
-Release  : 1
+Release  : 2
 URL      : https://www.cairographics.org/releases/py2cairo-1.10.0.tar.bz2
 Source0  : https://www.cairographics.org/releases/py2cairo-1.10.0.tar.bz2
 Summary  : Python bindings for cairo
