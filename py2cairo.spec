@@ -4,13 +4,17 @@
 #
 Name     : py2cairo
 Version  : 1.10.0
-Release  : 2
+Release  : 3
 URL      : https://www.cairographics.org/releases/py2cairo-1.10.0.tar.bz2
 Source0  : https://www.cairographics.org/releases/py2cairo-1.10.0.tar.bz2
 Summary  : Python bindings for cairo
 Group    : Development/Tools
 License  : LGPL-2.1 MPL-1.1
+Requires: py2cairo-legacypython
+Requires: py2cairo-python
 BuildRequires : pkgconfig(cairo)
+BuildRequires : python-dev
+Patch1: Create-ChangeLog.patch
 
 %description
 Pycairo - Python bindings for cairo
@@ -20,6 +24,69 @@ Dependencies
 cairo   >= 1.10.0
 Python  >= 2.6
 
+%package dev
+Summary: dev components for the py2cairo package.
+Group: Development
+Provides: py2cairo-devel
+
+%description dev
+dev components for the py2cairo package.
+
+
+%package legacypython
+Summary: legacypython components for the py2cairo package.
+Group: Default
+Requires: python-core
+
+%description legacypython
+legacypython components for the py2cairo package.
+
+
+%package python
+Summary: python components for the py2cairo package.
+Group: Default
+Requires: py2cairo-legacypython
+
+%description python
+python components for the py2cairo package.
+
+
+%prep
+%setup -q -n py2cairo-1.10.0
+%patch1 -p1
+
+%build
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
+export LANG=C
+export SOURCE_DATE_EPOCH=1508524797
+%reconfigure --disable-static
+make V=1  %{?_smp_mflags}
+
+%check
+export LANG=C
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
+make VERBOSE=1 V=1 %{?_smp_mflags} check
+
+%install
+export SOURCE_DATE_EPOCH=1508524797
+rm -rf %{buildroot}
+%make_install
 
 %files
+%defattr(-,root,root,-)
+
+%files dev
+%defattr(-,root,root,-)
+/usr/include/pycairo/pycairo.h
+/usr/lib64/pkgconfig/pycairo.pc
+
+%files legacypython
+%defattr(-,root,root,-)
+/usr/lib/python2*/*
+
+%files python
 %defattr(-,root,root,-)
